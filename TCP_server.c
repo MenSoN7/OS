@@ -61,6 +61,7 @@ void main() {
       while ((n = read(newsockfd, line, 999)) > 0) {
         printf("\nClient: %s\n", line);
       }
+      //если при чтении возникла ошибка - завершаем работу
       if (n < 0) {
         perror(NULL);
         close(sockfd);

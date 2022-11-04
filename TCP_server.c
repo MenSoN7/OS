@@ -12,8 +12,8 @@ void main() {
   //дескрипторы для пассивного(слушающего) и присоединенного сокетов
   int sockfd, newsockfd;
   int clilen, n;
-  // переменная для передачи сообщений
-  char line[1000];
+  //массивы для отсылаемой и принятой строки 
+  char sendline[1000], recvline[1000];
   //структуры для размещения полных адресов сервера и клиента
   struct sockaddr_in servaddr, cliaddr;
   //создаем TCP-сокет
@@ -56,10 +56,10 @@ void main() {
   if (pid == 0) //дочерний процесс - читает и выводит присылаемые сообщения 
     for (;;) {
       //обнулить строку перед чтением
-      memset(line, 0, 1000);
+      memset(recvline, 0, 1000);
       //принимаем данные
-      while ((n = read(newsockfd, line, 999)) > 0) {
-        printf("\nClient: %s\n", line);
+      while ((n = read(newsockfd, recvline, 999)) > 0) {
+        printf("\nСобеседник: %s\n", recvline);
       }
       //если при чтении возникла ошибка - завершаем работу
       if (n < 0) {
@@ -71,14 +71,14 @@ void main() {
     }  
   else  // родительский процесс - отправляет сообщения
     for (;;) {
-      printf("\nServer: ...\n");
+      printf("\nВы:\n");
       fflush(stdin);
       //обнуляем перед записью
-      memset(line, 0, 1000);
-      //заносим в line сообщение
-      fgets(line, 1000, stdin);
+      memset(sendline, 0, 1000);
+      //заносим в sendline сообщение
+      fgets(sendline, 1000, stdin);
       //отправляем данные
-      while ((n = write(newsockfd, line, strlen(line) + 1)) < 0) {       
+      while ((n = write(newsockfd, sendline, strlen(sendline) + 1)) < 0) {       
         perror(NULL);
         close(sockfd);
         close(newsockfd);

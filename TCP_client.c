@@ -21,10 +21,6 @@ void main(int argc, char **argv) {
     printf("Неверное количество аргументов\nВведите IP-адрес\n");
     exit(1);
   }
-  
-  //обнуляем символьные массивы
-  memset(sendline, 0, 1000);
-  memset(recvline, 0, 1000);
   //создаем TCP-сокет
   if ((sockfd = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
     perror(NULL);
@@ -66,7 +62,7 @@ void main(int argc, char **argv) {
     }  
   else  // родительский процесс - отправляет сообщения
     for (;;) {
-      printf("\Вы:\n");
+      printf("Вы:\n");
       fflush(stdin);
       //обнуляем перед записью
       memset(sendline, 0, 1000);
